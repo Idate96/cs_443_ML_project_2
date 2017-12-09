@@ -6,8 +6,9 @@ import random
 
 
 def main():
+    dir = 'twitter-datasets'
     print("loading cooccurrence matrix")
-    with open('cooc.pkl', 'rb') as f:
+    with open(dir + '/cooc.pkl', 'rb') as f:
         cooc = pickle.load(f)
     print("{} nonzero entries".format(cooc.nnz))
 
