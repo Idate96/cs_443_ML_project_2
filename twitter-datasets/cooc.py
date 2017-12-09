@@ -11,7 +11,7 @@ def main():
 
     data, row, col = [], [], []
     counter = 1
-    for fn in ['pos_train.txt', 'neg_train.txt']:
+    for fn in ['train_pos.txt', 'train_neg.txt']:
         with open(fn) as f:
             for line in f:
                 tokens = [vocab.get(t, -1) for t in line.strip().split()]
@@ -26,6 +26,7 @@ def main():
                     print(counter)
                 counter += 1
     cooc = coo_matrix((data, (row, col)))
+    print(np.shape(cooc))
     print("summing duplicates (this can take a while)")
     cooc.sum_duplicates()
     with open('cooc.pkl', 'wb') as f:
