@@ -1,4 +1,7 @@
 import numpy as np
+import torch
+import torch.nn.functional as f
+from torch.autograd import Variable
 
 def embed_sentence(sentence, vocabulary, embedding):
     """
@@ -27,5 +30,12 @@ def extract_features(embedded_sentence):
     assert (feature_vector.shape[1] == 1), "Shape of feature_vector is not correct"
     return feature_vector
 
+def optimise_weights(feature_vector, labels):
+    weights = Variable()
+    converged = False
+    while i < max_iter or not converged:
+        loss = f.mse(f.sigmoid(feature_vector.T @ weights), labels)
+        loss.backward()
+        gradient = weights.grad
 
 
