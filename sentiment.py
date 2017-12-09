@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 def embed_sentence(sentence, vocabulary, embedding):
     """
@@ -26,6 +27,5 @@ def extract_features(embedded_sentence):
     assert (feature_vector.shape[0] == embedded_sentence.shape[1]), "Shape of feature_vector is not correct"
     assert (feature_vector.shape[1] == 1), "Shape of feature_vector is not correct"
     return feature_vector
-
 
 
