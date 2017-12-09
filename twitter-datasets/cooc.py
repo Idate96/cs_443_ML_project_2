@@ -26,6 +26,7 @@ def main():
                     print(counter)
                 counter += 1
     cooc = coo_matrix((data, (row, col)))
+    print(np.shape(cooc))
     print("summing duplicates (this can take a while)")
     cooc.sum_duplicates()
     with open('cooc.pkl', 'wb') as f:
