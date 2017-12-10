@@ -10,4 +10,7 @@ twitter-datasets/vocab.pkl
 twitter-datasets/vocab_cut.txt
 twitter-datasets/sample_submission.csv
 twitter-datasets/test_data.txt
+__pycache__/data_utils.cpython-36.pyc
+__pycache__/models.cpython-36.pyc
+__pycache__/sentiment.cpython-36.pyc
 .DS_Store
