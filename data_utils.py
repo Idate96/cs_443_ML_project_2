@@ -5,8 +5,13 @@ import random
 import torch
 random.seed = 10
 import data_utils
+import sentiment
 # encoding=utf8
 import sys
+import os
+import matplotlib.pyplot as plt
+import csv
+from torch.autograd import Variable
 
 
 def load_vocabulary(directory='twitter-datasets'):
@@ -122,6 +127,78 @@ def generate_dataloader(dataset_features, labels, batch_size, ratio_train_val_se
     dataloader_test = torch.utils.data.DataLoader(tensor_dataset_val, batch_size=batch_size,
                                                  shuffle=True)
     return dataloader_train, dataloader_test
+
+def plot_convergence(epochs_num, train_losses, validation_losses, directory):
+    """Plot test and train error against the epoch"""
+    fig, ax = plt.subplots()
+    x = np.arange(0, epochs_num)
+    train_trend, = ax.plot(x, train_losses, label="Train loss")
+    test_trend, = ax.plot(x, validation_losses, label="Test loss")
+    ax.legend(loc='lower right')
+    plt.xlabel('epoch')
+    plt.ylabel('loss')
+    plt.title('Loss history')
+    label = "convergence plot"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    plt.savefig(directory + '/' + label + '.png',
+                bbox_inches='tight')
+
+def plot_accuracy(epochs_num, train_accuracies, validation_accuracies, directory):
+    fig, ax = plt.subplots()
+    x = np.arange(0, epochs_num)
+    train_trend, = ax.plot(x, train_accuracies, label="Train accuracy")
+    test_trend, = ax.plot(x, validation_accuracies, label="Test accuracy")
+    ax.legend(loc='lower right')
+    plt.xlabel('accuracy')
+    plt.ylabel('loss')
+    plt.title('Learning curves')
+    label = "accuracy plot"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    plt.savefig(directory + '/' + label + '.png',
+                bbox_inches='tight')
+
+
+def save_data(epochs_num, train_accuracies, val_accuracies, train_losses, val_losses, directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    file = open(directory + "/data.txt", "w")
+    file.write("Number of epochs: " + str(epochs_num) + "\n")
+    file.write("Train set losses: \n")
+    file.write(str([format(loss) for loss in train_losses]) + "\n")
+    file.write("Train set accuracies: \n")
+    file.write(str([format(accuracy) for accuracy in train_accuracies]) + "\n")
+    file.write("Validation set losses: \n")
+    file.write(str([format(loss) for loss in val_losses]) + "\n")
+    file.write("Validation set accuracies: \n")
+    file.write(str([format(accuracy) for accuracy in val_accuracies]) + "\n")
+    file.close()
+
+
+def format(value):
+    return "%.3f" % value
+
+
+def create_csv_submission(model, dataset_features, name):
+    """
+    Creates an output file in csv format for submission to kaggle
+    Arguments: ids (event ids associated with each prediction)
+               y_pred (predicted class labels)
+               name (string name of .csv output file to be created)
+    """
+    tensor_features = torch.FloatTensor(dataset_features)
+    dataset = Variable(tensor_features, requires_grad=False)
+    output = model(dataset)
+    y_pred = sentiment.predict(output.data).numpy()
+    y_pred = np.where(y_pred == 0, -1, 1)
+    with open( name + "/" + "submission_file", 'w') as csvfile:
+        fieldnames = ['Id', 'Prediction']
+        writer = csv.DictWriter(csvfile, delimiter=",", fieldnames=fieldnames)
+        writer.writeheader()
+        for idx, pred in enumerate(y_pred):
+            writer.writerow({'Id': idx, 'Prediction': int(pred)})
+
 
 if __name__ == '__main__':
     load_vocabulary()

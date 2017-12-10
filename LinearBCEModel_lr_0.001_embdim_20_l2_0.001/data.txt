@@ -1,0 +1,9 @@
+Number of epochs: 2
+Train set losses: 
+['0.687', '0.682']
+Train set accuracies: 
+['0.687', '0.682']
+Validation set losses: 
+['0.576', '0.601']
+Validation set accuracies: 
+['0.577', '0.602']

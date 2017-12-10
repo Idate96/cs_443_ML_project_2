@@ -105,7 +105,7 @@ def test(model, dataloader):
     output = model(dataset)
     accuracy = compute_accuracy(predict(output.data).numpy(), target.data.numpy())
     loss = model.loss(output, target)
-    return accuracy, loss.data.numpy()
+    return accuracy, loss.data.numpy(),
 
 
 def compute_accuracy(predictions, target):
