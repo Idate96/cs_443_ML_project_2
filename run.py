@@ -1,5 +1,5 @@
 from sentiment import *
-from models import MSEModel
+from models import BCEModel
 import data_utils
 
 def main():
@@ -13,11 +13,12 @@ def main():
     embeddings, vocabulary, dataset, labels = data_utils.load_params(embedding_dim,
                                                                      use_all_data=False)
     dataset_features = compute_dataset_features(dataset, vocabulary, embeddings)
-    dataloader = data_utils.generate_dataloader(dataset_features, labels, batch_size, shuffle=True)
+    dataloader_train, dataloader_val = data_utils.generate_dataloader(dataset_features, labels,
+                                                                    batch_size)
 
     # learning algo
-    model = MSEModel(embedding_dim, learning_rate)
-    train(model, dataloader, epochs_num)
+    model = BCEModel(embedding_dim, learning_rate)
+    train(model, dataloader_train, dataloader_val, epochs_num)
 
 
 if __name__ == "__main__":
