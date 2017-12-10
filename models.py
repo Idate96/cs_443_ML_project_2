@@ -14,14 +14,11 @@ class MSEModel(nn.Module):
             nn.Linear(1024, 1),
             nn.Sigmoid())
         self.learning_rate = learning_rate
+        self.loss = nn.BCELoss()
         self.optimizer = None
 
     def forward(self, input):
         return self.model(input)
-
-    def loss(self, output, target):
-        loss_func = nn.BCELoss()
-        return loss_func(output, target)
 
     def add_optimizer(self):
         self.optimizer = optim.Adam(self.parameters(), lr=self.learning_rate)

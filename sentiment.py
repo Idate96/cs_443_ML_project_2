@@ -73,13 +73,18 @@ def train(model, dataloader, epochs=10):
 
             iter_counter += 1
 
-        dataset = Variable(dataloader.dataset.data_tensor, requires_grad=False)
-        target = Variable(dataloader.dataset.target_tensor.type(torch.FloatTensor),
-                          requires_grad=False)
-        output = model(dataset)
-        accuracy = compute_accuracy(predict(output.data).numpy(), target.data.numpy())
-        print("epoch: {0}, loss: {1}, accuracy: {2}" .format(epoch, current_loss.data.numpy(),
-                                                             accuracy))
+        train_accuracy, train_loss = test(model, dataloader)
+        print("epoch: {0}, loss: {1}, accuracy: {2}" .format(epoch, train_loss,
+                                                             train_accuracy))
+
+
+def test(model, dataloader):
+    dataset = Variable(dataloader.dataset.data_tensor, requires_grad=False)
+    target = Variable(dataloader.dataset.target_tensor.type(torch.FloatTensor), requires_grad=False)
+    output = model(dataset)
+    accuracy = compute_accuracy(predict(output.data).numpy(), target.data.numpy())
+    loss = model.loss(output, target)
+    return accuracy, loss.data.numpy()
 
 
 def compute_accuracy(predictions, target):

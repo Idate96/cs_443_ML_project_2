@@ -1,5 +1,4 @@
 .idea/
-embeddings.npy
 twitter-datasets/__init__.py
 twitter-datasets/cooc.pkl
 twitter-datasets/train_neg.txt

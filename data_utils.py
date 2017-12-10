@@ -68,14 +68,14 @@ def load_dataset(use_all_data=False):
     # return shuffled_dataset, shuffled_labels
     return dataset, labels
 
-def load_params(use_all_data=False, directory='twitter-datasets'):
+def load_params(embedding_dim=20, use_all_data=False, directory='twitter-datasets'):
     """
     Load parameter necessary for training.
     :param use_all_data (bool)
     :param directory: directory of data
     :return: embeddings, vocabulary, dataset, labels
     """
-    embeddings = np.load('embeddings.npy')
+    embeddings = np.load('embeddings_' + str(embedding_dim) + '.npy')
     with open(directory + '/' + 'vocab.pkl', 'rb') as file:
         vocabulary = pickle.load(file)
     dataset, labels = load_dataset(use_all_data)
