@@ -1,7 +1,7 @@
 from torch import nn
 from torch import optim
 
-class MSEModel(nn.Module):
+class BCEModel(nn.Module):
     def __init__(self, embedding_dims, learning_rate=10**-3):
         super().__init__()
         self.model = nn.Sequential(

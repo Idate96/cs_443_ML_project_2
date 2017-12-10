@@ -50,14 +50,20 @@ def compute_dataset_features(dataset, vocabulary, embeddings):
     return dataset_features
 
 
-def train(model, dataloader, epochs=10):
+def train(model, dataloader_train, dataloader_val=None, num_epochs=10):
     iter_counter = 0
     current_loss = 0
+
+    train_loss_history = []
+    val_loss_history = []
+    train_accuracy_history = []
+    val_accuracy_history = []
+
     model.add_optimizer()
 
-    for epoch in range(epochs):
-        for x, labels in dataloader:
-            if len(x) != dataloader.batch_size:
+    for epoch in range(num_epochs):
+        for x, labels in dataloader_train:
+            if len(x) != dataloader_train.batch_size:
                 continue
 
             x = Variable(x, requires_grad=False)
@@ -73,9 +79,24 @@ def train(model, dataloader, epochs=10):
 
             iter_counter += 1
 
-        train_accuracy, train_loss = test(model, dataloader)
-        print("epoch: {0}, loss: {1}, accuracy: {2}" .format(epoch, train_loss,
+        train_accuracy, train_loss = test(model, dataloader_train)
+        print("epoch: {0}, train loss: {1}, train accuracy: {2}" .format(epoch, train_loss,
                                                              train_accuracy))
+        train_loss_history.append(train_loss)
+        train_accuracy_history.append(train_accuracy)
+
+        if dataloader_val:
+            val_accuracy, val_loss = test(model, dataloader_val)
+            print("epoch: {0}, val loss: {1}, val accuracy: {2}".format(epoch, val_loss,
+                                                                        val_accuracy))
+            val_loss_history.append(val_loss)
+            val_accuracy_history.append(val_accuracy)
+
+    return train_loss_history, train_accuracy_history, val_loss_history, val_accuracy_history
+
+
+
+
 
 
 def test(model, dataloader):

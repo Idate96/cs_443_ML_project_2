@@ -100,12 +100,28 @@ def load_embedded_dataset(filename='00'):
     return dataset, labels
 
 
-def generate_dataloader(dataset_features, labels, batch_size, shuffle=False):
+def generate_dataloader(dataset_features, labels, batch_size, ratio_train_val_set = 0.9):
     tensor_features = torch.FloatTensor(dataset_features)
     labels_tensor = torch.FloatTensor(labels)
-    tensor_dataset = torch.utils.data.TensorDataset(tensor_features, labels_tensor)
-    dataloader = torch.utils.data.DataLoader(tensor_dataset, batch_size=batch_size, shuffle=True)
-    return dataloader
+
+    indeces = torch.randperm(len(labels))
+    train_indeces = indeces[:int(len(labels)*ratio_train_val_set)]
+    val_indeces = indeces[int(len(labels)*ratio_train_val_set):]
+
+    tensor_features_train = tensor_features[train_indeces]
+    tensor_features_val = tensor_features[val_indeces]
+    labels_tensor_train = labels_tensor[train_indeces]
+    labels_tensor_val = labels_tensor[val_indeces]
+
+    tensor_dataset_train = torch.utils.data.TensorDataset(tensor_features_train,
+                                                          labels_tensor_train)
+    tensor_dataset_val = torch.utils.data.TensorDataset(tensor_features_val,
+                                                          labels_tensor_val)
+    dataloader_train = torch.utils.data.DataLoader(tensor_dataset_train, batch_size=batch_size,
+                                                 shuffle=True)
+    dataloader_test = torch.utils.data.DataLoader(tensor_dataset_val, batch_size=batch_size,
+                                                 shuffle=True)
+    return dataloader_train, dataloader_test
 
 if __name__ == '__main__':
     load_vocabulary()
