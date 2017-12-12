@@ -5,9 +5,9 @@ import data_utils
 
 def main():
     # hyperparameters
-    embedding_dim = 20
+    embedding_dim = 200
     batch_size = 500
-    learning_rate = 10**-2
+    learning_rate = 10**-1
     epochs_num = 20
 
     # get features and labels of tweets
