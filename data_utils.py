@@ -39,7 +39,7 @@ def parse_samples(dataset):
     return parsed_dataset
 
 
-def load_dataset(use_all_data=False):
+def load_train_dataset(use_all_data=False):
     """
     Loads the dataset and generate corresponding labels, then it shuffles them
     :param use_all_data (bool) : indicates if all the dataset is used
@@ -47,7 +47,6 @@ def load_dataset(use_all_data=False):
             shuffled_lables (np.array): labels of the dataset,
                                         0 relate to negative and 1 to positive
     """
-
     if use_all_data:
         filename_pos = 'train_pos_full.txt'
         filename_neg = 'train_neg_full.txt'
@@ -62,16 +61,13 @@ def load_dataset(use_all_data=False):
     # join
     dataset = dataset_pos + dataset_neg
     labels = np.vstack((labels_pos, labels_neg)).flatten()
-    # mix to train better the classifier
-    # indeces = np.arange(0, len(labels))
-    # np.random.shuffle(indeces)
-    # shuffled_labels = labels[indeces]
-    # shuffled_dataset = []
-    # for i in range(len(dataset)):
-    #     shuffled_dataset.append(dataset[i])
-    #
-    # return shuffled_dataset, shuffled_labels
+
     return dataset, labels
+
+def load_test_data():
+    filaname = 'test_data.txt'
+    dataset_test = parse_samples(load_samples(filaname))
+    return dataset_test
 
 def load_params(embedding_dim=20, use_all_data=False, directory='twitter-datasets'):
     """
@@ -83,7 +79,7 @@ def load_params(embedding_dim=20, use_all_data=False, directory='twitter-dataset
     embeddings = np.load('embeddings_' + str(embedding_dim) + '.npy')
     with open(directory + '/' + 'vocab.pkl', 'rb') as file:
         vocabulary = pickle.load(file)
-    dataset, labels = load_dataset(use_all_data)
+    dataset, labels = load_train_dataset(use_all_data)
     return embeddings, vocabulary, dataset, labels
 
 def save_embedded_dataset(dataset, labels, filename='00',):
@@ -197,7 +193,7 @@ def create_csv_submission(model, dataset_features, name):
         writer = csv.DictWriter(csvfile, delimiter=",", fieldnames=fieldnames)
         writer.writeheader()
         for idx, pred in enumerate(y_pred):
-            writer.writerow({'Id': idx, 'Prediction': int(pred)})
+            writer.writerow({'Id': idx + 1, 'Prediction': int(pred)})
 
 
 if __name__ == '__main__':
