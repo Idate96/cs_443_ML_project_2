@@ -7,7 +7,7 @@ def main():
     # hyperparameters
     embedding_dim = 20
     batch_size = 500
-    learning_rate = 10**-1
+    learning_rate = 10**-2
     epochs_num = 20
 
     # get features and labels of tweets
@@ -19,7 +19,7 @@ def main():
 
     # learning algorithm
     print("preparing model...")
-    model = SingleLayerBCEModel(embedding_dim, learning_rate, number_neurons=256)
+    model = BCEModel(embedding_dim, learning_rate, number_neurons=256)
     print("model loaded. Start training data...")
     train_loss_history, train_accuracy_history, val_loss_history, val_accuracy_history = train(model, dataloader_train,
                                                                                                dataloader_val, epochs_num)
