@@ -5,7 +5,7 @@ import data_utils
 
 def main():
     # hyperparameters
-    embedding_dim = 200
+    embedding_dim = 50
     batch_size = 500
     learning_rate = 10**-2
     epochs_num = 20
@@ -19,7 +19,7 @@ def main():
 
     # learning algorithm
     print("preparing model...")
-    model = BCEModel(embedding_dim, learning_rate, l2_reg=1, number_neurons=256)
+    model = BCEModel(embedding_dim, learning_rate, l2_reg=10**-3, number_neurons=256)
     print("model loaded. Start training data...")
     train_loss_history, train_accuracy_history, val_loss_history, val_accuracy_history = train(model, dataloader_train,
                                                                                            dataloader_val, epochs_num)
