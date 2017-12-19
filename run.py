@@ -22,7 +22,7 @@ def main():
     model = BCEModel(embedding_dim, learning_rate, l2_reg=1, number_neurons=256)
     print("model loaded. Start training data...")
     train_loss_history, train_accuracy_history, val_loss_history, val_accuracy_history = train(model, dataloader_train,
-                                                                                               dataloader_val, epochs_num)
+                                                                                           dataloader_val, epochs_num)
 
     # plots
     data_utils.plot_convergence(epochs_num, train_loss_history, val_loss_history, model.name)
